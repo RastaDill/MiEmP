@@ -17,12 +17,34 @@
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
+(setq package-selected-packages
+      `(
+	lsp-ui
+	company
+	lsp-pyright
+	flycheck
+	lsp-mode
+	exec-path-from-shell
+	magit
+	markdown-mode))
+
 (require 'package)
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/"))
 
 ;; Initilize packages
 (package-initialize)
+
+;;; Bootstrapping use-package
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(eval-when-compile (require 'use-package))
+
+(use-package use-package
+  :config
+  (setq use-package-always-ensure t))
 
 ;; Added support gnome-keyring
 (exec-path-from-shell-copy-env "SSH_AUTH_SOCK")
@@ -38,14 +60,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
- '(custom-enabled-themes (quote (deeper-blue)))
+ '(custom-enabled-themes '(deeper-blue))
  '(display-battery-mode t)
- '(display-line-numbers-type (quote relative))
+ '(display-line-numbers-type 'relative)
  '(global-display-line-numbers-mode t)
  '(markdown-command "/usr/bin/pandoc")
- '(package-selected-packages
-   (quote
-    (lsp-ui company lsp-pyright flycheck lsp-mode exec-path-from-shell magit markdown-mode))))
+ '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
